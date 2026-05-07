@@ -10,9 +10,9 @@
 <body>
   <div class="container">
     <div class="mode">
-      <button id="work" class="active" onclick="setWorkTime()">Work time</button>
-      <button id="short" onclick="setShortBreak()">Short break</button>
-      <button id="long" onclick="setLongBreak()">Long Break</button>
+      <button id="work" class="active" onclick="setWorkTime()">25 min</button>
+      <button id="short" onclick="setShortBreak()">5 min</button>
+      <button id="long" onclick="setLongBreak()">15 min</button>
     </div>
     <div class="clock">
       <div id="minutes">25</div>
@@ -21,8 +21,7 @@
     </div>
     <div class="controls">
       <button id="start" value="start" onclick="onStartClick()">Start</button>
-      <button id="restart" onclick="onRestartClick()">Restart</button>
-      <button id="theme" onclick="onThemeClick()">Switch theme</button>
+      <button id="theme" onclick="onThemeClick()">🌞/🌒</button>
     </div>
     <div class="fullscreen">
       <button onclick="toggleFullScreen()">fullscreen mode</button>
@@ -37,7 +36,7 @@
   }
 
   :root.dark {
-    --text-color: white;
+    --text-color: rgba(255, 255, 255, 0.75);
     --bg-color: black;
 
     .clock {
@@ -47,11 +46,12 @@
     button {
       border: none;
       background: none;
+      font-weight: 200;
+
 
       &.active {
         color: var(--text-color);
-        text-decoration: underline;
-        font-weight: 100;
+        font-weight: 600;
       }
     }
   }
@@ -59,8 +59,9 @@
   body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
+    transition: background 0.5s, color 0.5s;
   }
 
   button {
@@ -75,6 +76,9 @@
     &.active {
       background: var(--text-color);
       color: var(--bg-color);
+    }
+    &#theme {
+      border: none;
     }
   }
 
@@ -93,7 +97,6 @@
   .clock {
     font-size: 72px;
     font-weight: bold;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     margin: 20px 0;
     display: flex;
 
@@ -104,11 +107,11 @@
   }
 
   .fullscreen {
-    margin-top: 100px;
+    margin-top: 80px;
 
     button {
       font-size: 12px;
-      font-weight: 100;
+      font-weight: 500;
     }
 
   }
@@ -157,15 +160,15 @@
     setTime('15', '00');
   }
   
-  function onRestartClick() {
-    if (activeMode === 'work') {
-      setWorkTime();
-    } else if (activeMode === 'short') {
-      setShortBreak();
-    } else {
-      setLongBreak();
-    }
-  }
+  // function onRestartClick() {
+  //   if (activeMode === 'work') {
+  //     setWorkTime();
+  //   } else if (activeMode === 'short') {
+  //     setShortBreak();
+  //   } else {
+  //     setLongBreak();
+  //   }
+  // }
   
   function onThemeClick() {
     document.documentElement.classList.toggle('dark');
