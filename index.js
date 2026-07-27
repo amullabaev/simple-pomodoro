@@ -24,6 +24,18 @@ function setMode(selectedModeButton) {
   setClock(Number(selectedModeButton.value));
 }
 
+function disableActions() {
+  workBtn.disabled = true
+  shortBreakBtn.disabled = true
+  longBreakBtn.disabled = true
+}
+
+function enableActions() {
+  workBtn.disabled = false
+  shortBreakBtn.disabled = false
+  longBreakBtn.disabled = false
+}
+
 function onThemeClick() {
   document.documentElement.classList.toggle('dark');
   localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -49,6 +61,7 @@ function onStartPauseClick(action) {
 
 function onStartClick() {
   renameActionButton('Pause');
+  disableActions()
   if (timerInSeconds <= 0) resetTimeToSelectedMode();
   runTimer();
   setWakeLock();
@@ -96,6 +109,7 @@ async function setWakeLock() {
 function resetTimer() {
   clearInterval(timerId);
   renameActionButton('Start')
+  enableActions()
   if (wakeLock) {
     wakeLock.release();
     wakeLock = null;

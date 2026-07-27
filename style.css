@@ -63,6 +63,11 @@ button {
   justify-content: center;
 }
 
+.mode button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .clock {
   font-size: 72px;
   font-weight: bold;
