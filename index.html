@@ -15,9 +15,9 @@
 <body>
   <div class="container">
     <div class="mode">
-      <button id="work" value="1500" class="active" onclick="setWorkTime()">25 min</button>
-      <button id="short" value="300" onclick="setShortBreak()">5 min</button>
-      <button id="long" value="900" onclick="setLongBreak()">15 min</button>
+      <button id="work" value="1500" class="active" onclick="setMode(this)">25 min</button>
+      <button id="short" value="300" onclick="setMode(this)">5 min</button>
+      <button id="long" value="900" onclick="setMode(this)">15 min</button>
     </div>
     <div class="clock">
       <div id="minutes">25</div>

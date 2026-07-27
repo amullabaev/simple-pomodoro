@@ -14,25 +14,14 @@ const longBreakSeconds = longBreakBtn.value
 
 let timerInSeconds = defaultWorkTimeSeconds
 
-function setWorkTime() {
-  workBtn.classList.add("active");
-  longBreakBtn.classList.remove("active");
-  shortBreakBtn.classList.remove("active");
-  setClock(defaultWorkTimeSeconds);
-}
-
-function setShortBreak() {
+function setMode(selectedModeButton) {
   workBtn.classList.remove("active");
   longBreakBtn.classList.remove("active");
-  shortBreakBtn.classList.add("active");
-  setClock(shortBreakSeconds);
-}
-
-function setLongBreak() {
-  workBtn.classList.remove("active");
-  longBreakBtn.classList.add("active");
   shortBreakBtn.classList.remove("active");
-  setClock(longBreakSeconds);
+
+  selectedModeButton.classList.add("active")
+
+  setClock(Number(selectedModeButton.value));
 }
 
 function onThemeClick() {
@@ -66,6 +55,7 @@ function onStartClick() {
 }
 
 function runTimer() {
+  if (timerId) clearTimeout(timerId)
   const startMs = performance.now()
   const endMs = startMs + timerInSeconds * 1000
 
@@ -95,7 +85,7 @@ function renameActionButton(name) {
   }
 }
 
-function setWakeLock() {
+async function setWakeLock() {
   try {
     wakeLock = await navigator.wakeLock.request("screen");
   } catch (e) {
@@ -114,7 +104,7 @@ function resetTimer() {
 
 function resetTimeToSelectedMode() {
   const activeMode = document.querySelector('.mode .active')
-  timerInSeconds = Number(activeMode.value)
+  setClock(Number(activeMode.value))
 }
 
 function setClock(timeInSeconds) {
