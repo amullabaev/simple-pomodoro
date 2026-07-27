@@ -1,14 +1,6 @@
 let timerId;
 let wakeLock;
 
-const modes = {
-  work: 'work',
-  short: 'short',
-  long: 'long'
-}
-
-let activeMode = modes.work;
-
 const workBtn = document.getElementById("work");
 const shortBreakBtn = document.getElementById("short");
 const longBreakBtn = document.getElementById("long");
@@ -16,28 +8,31 @@ const startBtn = document.getElementById("start");
 const minutes = document.getElementById("minutes");
 const seconds = document.getElementById("seconds");
 
+const defaultWorkTimeSeconds = workBtn.value
+const shortBreakSeconds = shortBreakBtn.value
+const longBreakSeconds = longBreakBtn.value
+
+let timerInSeconds = defaultWorkTimeSeconds
+
 function setWorkTime() {
-  activeMode = modes.work;
   workBtn.classList.add("active");
   longBreakBtn.classList.remove("active");
   shortBreakBtn.classList.remove("active");
-  setTime('25', '00');
+  setClock(defaultWorkTimeSeconds);
 }
 
 function setShortBreak() {
-  activeMode = modes.short;
   workBtn.classList.remove("active");
   longBreakBtn.classList.remove("active");
   shortBreakBtn.classList.add("active");
-  setTime('05', '00');
+  setClock(shortBreakSeconds);
 }
 
 function setLongBreak() {
-  activeMode = modes.long;
   workBtn.classList.remove("active");
   longBreakBtn.classList.add("active");
   shortBreakBtn.classList.remove("active");
-  setTime('15', '00');
+  setClock(longBreakSeconds);
 }
 
 function onThemeClick() {
@@ -55,49 +50,75 @@ function toggleFullScreen() {
   }
 }
 
-function onStartClick() {
-  const action = startBtn.innerText === "Start" ? "start" : "pause";
-  action === "start" ? (startBtn.innerText = "Pause") : (startBtn.innerText = "Start");
-  if (action === "start") {
-    setWakeLock()
-    timerId = setInterval(() => {
-      if (seconds.innerText !== "00") {
-        seconds.innerText = (+seconds.innerText - 1).toString().padStart(2, '0');
-      } else if (minutes.innerText !== "00") {
-        minutes.innerText = (+minutes.innerText - 1).toString().padStart(2, '0');
-        seconds.innerText = "59";
-      } else {
-        clearInterval(timerId);
-        startBtn.innerText = "Start";
-      }
-    }, 1000);
+function onStartPauseClick(action) {
+  if (action === 'start') {
+    onStartClick()
   } else {
     resetTimer()
   }
 }
 
+function onStartClick() {
+  renameActionButton('Pause');
+  if (timerInSeconds <= 0) resetTimeToSelectedMode();
+  runTimer();
+  setWakeLock();
+}
+
+function runTimer() {
+  const startMs = performance.now()
+  const endMs = startMs + timerInSeconds * 1000
+
+  const tick = () => {
+    const timeLeftMs = Math.max(0, endMs - performance.now())
+    const secondsLeft = Math.ceil(timeLeftMs / 1000)
+    setClock(secondsLeft)
+
+    if (timeLeftMs <= 0) {
+      resetTimer()
+      return
+    }
+    const delay = timeLeftMs % 1000 || 1000
+    timerId = setTimeout(tick, delay)
+  }
+
+  tick()
+}
+
+function renameActionButton(name) {
+  if (name === 'Start') {
+    startBtn.innerText = "Start"
+    startBtn.value = "start"
+  } else {
+    startBtn.innerText = "Pause"
+    startBtn.value = "pause"
+  }
+}
+
 function setWakeLock() {
-  if ('wakeLock' in navigator) {
-    navigator.wakeLock.request('screen').then(wl => {
-      wakeLock = wl;
-      wakeLock.addEventListener('release', () => {
-        console.log('Wake Lock was released');
-      });
-    })
+  try {
+    wakeLock = await navigator.wakeLock.request("screen");
+  } catch (e) {
+    console.log(e)
   }
 }
 
 function resetTimer() {
   clearInterval(timerId);
+  renameActionButton('Start')
   if (wakeLock) {
     wakeLock.release();
     wakeLock = null;
   }
 }
 
-function setTime(m, s) {
-  const minutes = document.getElementById("minutes");
-  const seconds = document.getElementById("seconds");
-  minutes.innerText = m;
-  seconds.innerText = s;
+function resetTimeToSelectedMode() {
+  const activeMode = document.querySelector('.mode .active')
+  timerInSeconds = Number(activeMode.value)
+}
+
+function setClock(timeInSeconds) {
+  timerInSeconds = timeInSeconds
+  minutes.innerText = Math.floor(timeInSeconds / 60).toString().padStart(2, '0');
+  seconds.innerText = Math.floor(timeInSeconds % 60).toString().padStart(2, '0');
 };

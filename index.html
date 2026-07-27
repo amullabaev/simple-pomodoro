@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simple pomodoro timer</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="index.js" async></script>
 </head>
 <script>
   const savedTheme = localStorage.getItem('theme');
@@ -16,9 +15,9 @@
 <body>
   <div class="container">
     <div class="mode">
-      <button id="work" class="active" onclick="setWorkTime()">25 min</button>
-      <button id="short" onclick="setShortBreak()">5 min</button>
-      <button id="long" onclick="setLongBreak()">15 min</button>
+      <button id="work" value="1500" class="active" onclick="setWorkTime()">25 min</button>
+      <button id="short" value="300" onclick="setShortBreak()">5 min</button>
+      <button id="long" value="900" onclick="setLongBreak()">15 min</button>
     </div>
     <div class="clock">
       <div id="minutes">25</div>
@@ -26,13 +25,14 @@
       <div id="seconds">00</div>
     </div>
     <div class="controls">
-      <button id="start" value="start" onclick="onStartClick()">Start</button>
+      <button id="start" value="start" onclick="onStartPauseClick(this.value)">Start</button>
       <button id="theme" onclick="onThemeClick()">🌞/🌒</button>
     </div>
     <div class="fullscreen">
       <button onclick="toggleFullScreen()">fullscreen mode</button>
     </div>
   </div>
+  <script src="index.js"></script>
 </body>
 
 </html>
