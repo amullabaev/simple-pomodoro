@@ -18,6 +18,8 @@ const longBreakSeconds = longBreakBtn.value
 
 let timerInSeconds = defaultWorkTimeSeconds
 
+setFinishedCycles()
+
 function setMode(selectedModeButton) {
   workBtn.classList.remove("active");
   longBreakBtn.classList.remove("active");
@@ -94,6 +96,7 @@ function runTimer() {
 
     if (timeLeftMs <= 0) {
       resetTimer()
+      recordFinishedSession()
       return
     }
     const delay = timeLeftMs % 1000 || 1000
@@ -149,4 +152,39 @@ function onDisplayModeChange(mode) {
     seconds.hidden = false
     hours.hidden = true
   }
+}
+
+function recordFinishedSession() {
+  const activeMode = document.querySelector('.mode .active').id
+  if (activeMode !== 'work') return
+
+  let workCycles
+  try {
+    workCycles = JSON.parse(localStorage.getItem('workCycles') || {})
+  } catch {
+    workCycles = {}
+  }
+  const todayDate = (new Date()).toLocaleDateString()
+  if (workCycles.date !== todayDate) {
+    workCycles.date = todayDate
+    workCycles.count = 1
+  } else {
+    workCycles.count++
+  }
+  document.getElementById('finishedCyclesCount').innerText = workCycles.count
+  localStorage.setItem('workCycles', JSON.stringify(workCycles))
+}
+
+function setFinishedCycles() {
+  let workCycles
+  try {
+    workCycles = JSON.parse(localStorage.getItem('workCycles') || {})
+  } catch {
+    workCycles = {}
+  }
+  const todayDate = (new Date()).toLocaleDateString()
+  if (workCycles.date !== todayDate) {
+    workCycles.count = 0
+  }
+  document.getElementById('finishedCyclesCount').innerText = workCycles.count
 }
