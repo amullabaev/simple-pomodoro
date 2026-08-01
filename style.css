@@ -63,6 +63,10 @@ button {
   justify-content: center;
 }
 
+.mode button {
+  line-height: 22px;
+}
+
 .mode button[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
@@ -74,10 +78,45 @@ button {
   margin: 20px 0;
   display: flex;
 
+  #hours,
   #minutes,
   #seconds {
     width: 80px;
   }
+
+  #hours,
+  #seconds {
+    margin-right: 30px;
+  }
+
+  #hours::after {
+    content: ":";
+    margin: 0 5px;
+  }
+
+  #seconds::before {
+    content: ":";
+    margin: 0 5px;
+  }
+}
+
+#progress {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 6px;
+  margin-bottom: 20px;
+}
+
+::-webkit-progress-bar {
+  background-color: grey;
+}
+
+::-webkit-progress-value {
+  background-color: var(--text-color);
+}
+
+#displayMode {
+  width: 80px;
 }
 
 .fullscreen {

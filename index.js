@@ -5,6 +5,10 @@ const workBtn = document.getElementById("work");
 const shortBreakBtn = document.getElementById("short");
 const longBreakBtn = document.getElementById("long");
 const startBtn = document.getElementById("start");
+const displayMode = document.getElementById("displayMode")
+const progressBar = document.getElementById("progress")
+
+const hours = document.getElementById("hours");
 const minutes = document.getElementById("minutes");
 const seconds = document.getElementById("seconds");
 
@@ -67,6 +71,17 @@ function onStartClick() {
   setWakeLock();
 }
 
+function resetTimer() {
+  clearInterval(timerId);
+  // TODO: conditionally rename to "Continue"
+  renameActionButton('Start')
+  enableActions()
+  if (wakeLock) {
+    wakeLock.release();
+    wakeLock = null;
+  }
+}
+
 function runTimer() {
   if (timerId) clearTimeout(timerId)
   const startMs = performance.now()
@@ -76,6 +91,7 @@ function runTimer() {
     const timeLeftMs = Math.max(0, endMs - performance.now())
     const secondsLeft = Math.ceil(timeLeftMs / 1000)
     setClock(secondsLeft)
+    setProgress(secondsLeft)
 
     if (timeLeftMs <= 0) {
       resetTimer()
@@ -106,16 +122,6 @@ async function setWakeLock() {
   }
 }
 
-function resetTimer() {
-  clearInterval(timerId);
-  renameActionButton('Start')
-  enableActions()
-  if (wakeLock) {
-    wakeLock.release();
-    wakeLock = null;
-  }
-}
-
 function resetTimeToSelectedMode() {
   const activeMode = document.querySelector('.mode .active')
   setClock(Number(activeMode.value))
@@ -123,6 +129,25 @@ function resetTimeToSelectedMode() {
 
 function setClock(timeInSeconds) {
   timerInSeconds = timeInSeconds
-  minutes.innerText = Math.floor(timeInSeconds / 60).toString().padStart(2, '0');
+  hours.innerText = Math.floor(timeInSeconds / 60 / 60).toString().padStart(2, '0');
+  minutes.innerText = Math.floor((timeInSeconds % 3600) / 60).toString().padStart(2, '0');
   seconds.innerText = Math.floor(timeInSeconds % 60).toString().padStart(2, '0');
 };
+
+function setProgress(timeInSeconds) {
+  const activeMode = document.querySelector('.mode .active')
+  progressBar.value = (timeInSeconds / activeMode.value) * 100
+}
+
+function onDisplayModeChange(mode) {
+  const newMode = mode === 'mm:ss' ? 'hh:mm' : 'mm:ss'
+  displayMode.value = newMode
+  displayMode.innerText = newMode
+  if (newMode === 'hh:mm') {
+    seconds.hidden = true
+    hours.hidden = false
+  } else {
+    seconds.hidden = false
+    hours.hidden = true
+  }
+}

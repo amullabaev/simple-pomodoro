@@ -20,12 +20,16 @@
       <button id="long" value="900" onclick="setMode(this)">15 min</button>
     </div>
     <div class="clock">
+      <div id="hours" hidden>00</div>
       <div id="minutes">25</div>
-      <div>:</div>
       <div id="seconds">00</div>
     </div>
+
+    <progress id="progress" max="100" value="100"></progress>
+
     <div class="controls">
       <button id="start" value="start" onclick="onStartPauseClick(this.value)">Start</button>
+      <button id="displayMode" value="mm:ss" onclick="onDisplayModeChange(this.value)">mm:ss</button>
       <button id="theme" onclick="onThemeClick()">🌞/🌒</button>
     </div>
     <div class="fullscreen">
