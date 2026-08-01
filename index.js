@@ -73,7 +73,6 @@ function onStartClick() {
 
 function resetTimer() {
   clearInterval(timerId);
-  // TODO: conditionally rename to "Continue"
   renameActionButton('Start')
   enableActions()
   if (wakeLock) {
@@ -106,7 +105,7 @@ function runTimer() {
 
 function renameActionButton(name) {
   if (name === 'Start') {
-    startBtn.innerText = "Start"
+    startBtn.innerText = timerInSeconds > 0 ? "Continue" : "Start"
     startBtn.value = "start"
   } else {
     startBtn.innerText = "Pause"

@@ -51,8 +51,8 @@ button {
   }
 }
 
-#start {
-  min-width: 68px;
+.controls button {
+  min-width: 85px;
 }
 
 .container {
