@@ -6,17 +6,13 @@ const shortBreakBtn = document.getElementById("short");
 const longBreakBtn = document.getElementById("long");
 const startBtn = document.getElementById("start");
 const displayMode = document.getElementById("displayMode")
-const progressBar = document.getElementById("progress")
 
 const hours = document.getElementById("hours");
 const minutes = document.getElementById("minutes");
 const seconds = document.getElementById("seconds");
 
-const defaultWorkTimeSeconds = workBtn.value
-const shortBreakSeconds = shortBreakBtn.value
-const longBreakSeconds = longBreakBtn.value
 
-let timerInSeconds = defaultWorkTimeSeconds
+let timerInSeconds = workBtn.value
 
 setFinishedCycles()
 
@@ -40,11 +36,6 @@ function enableActions() {
   workBtn.disabled = false
   shortBreakBtn.disabled = false
   longBreakBtn.disabled = false
-}
-
-function onThemeClick() {
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 }
 
 function toggleFullScreen() {
@@ -138,20 +129,8 @@ function setClock(timeInSeconds) {
 
 function setProgress(timeInSeconds) {
   const activeMode = document.querySelector('.mode .active')
+  const progressBar = document.getElementById("progress")
   progressBar.value = (timeInSeconds / activeMode.value) * 100
-}
-
-function onDisplayModeChange(mode) {
-  const newMode = mode === 'mm:ss' ? 'hh:mm' : 'mm:ss'
-  displayMode.value = newMode
-  displayMode.innerText = newMode
-  if (newMode === 'hh:mm') {
-    seconds.hidden = true
-    hours.hidden = false
-  } else {
-    seconds.hidden = false
-    hours.hidden = true
-  }
 }
 
 function recordFinishedSession() {

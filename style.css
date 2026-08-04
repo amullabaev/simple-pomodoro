@@ -1,10 +1,14 @@
+html {
+  font-size: 16px;
+}
+
 :root {
   --text-color: black;
   --bg-color: white;
 }
 
 :root.dark {
-  --text-color: rgba(255, 255, 255, 0.75);
+  --text-color: #ffffffbf;
   --bg-color: black;
 
   .clock {
@@ -32,11 +36,18 @@ body {
   transition: background 0.5s, color 0.5s;
 }
 
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+}
+
+
 button {
   background: var(--bg-color);
   color: var(--text-color);
   margin: 5px;
-  font-size: 18px;
+  font-size: 1.125rem;
   cursor: pointer;
   border: 2px solid var(--text-color);
   border-radius: 2px;
@@ -46,13 +57,38 @@ button {
     color: var(--bg-color);
   }
 
-  &#theme {
+  &#theme,
+  &#settings {
     border: none;
   }
 }
 
+p {
+  font-size: 1.125rem;
+}
+
 .controls button {
-  min-width: 85px;
+  min-width: 5.6rem;
+  margin: 1.25rem;
+}
+
+button#settings {
+  svg {
+    circle {
+      stroke: var(--text-color);
+    }
+
+    path {
+      stroke: var(--text-color);
+    }
+  }
+}
+
+#closeSettings {
+  color: black;
+  background: white;
+  border: 2px solid black;
+  margin: 0.25rem 0;
 }
 
 .container {
@@ -64,7 +100,8 @@ button {
 }
 
 .mode button {
-  line-height: 22px;
+  line-height: 1.25rem;
+  vertical-align: middle;
 }
 
 .mode button[disabled] {
@@ -73,42 +110,42 @@ button {
 }
 
 .clock {
-  font-size: 72px;
+  font-size: 4.5rem;
   font-weight: bold;
-  margin: 20px 0;
+  margin: 1.25rem 0;
   display: flex;
 
   #hours,
   #minutes,
   #seconds {
-    width: 80px;
+    width: 5rem;
   }
 
   #hours,
   #seconds {
-    margin-right: 30px;
+    margin-right: 2rem;
   }
 
   #hours::after {
     content: ":";
-    margin: 0 5px;
+    margin: 0 0.25rem;
   }
 
   #seconds::before {
     content: ":";
-    margin: 0 5px;
+    margin: 0 0.25rem;
   }
 }
 
 #progress {
   -webkit-appearance: none;
-  width: 200px;
-  height: 6px;
-  margin-bottom: 20px;
+  width: 12.5rem;
+  height: 0.325rem;
+  margin-bottom: 0;
 }
 
 ::-webkit-progress-bar {
-  background-color: grey;
+  background-color: #808080;
 }
 
 ::-webkit-progress-value {
@@ -116,14 +153,15 @@ button {
 }
 
 #displayMode {
-  width: 80px;
+  width: 5rem;
 }
 
-.fullscreen {
-  margin-top: 80px;
+dialog {
+  padding: 1px;
 
-  button {
-    font-size: 12px;
-    font-weight: 500;
+  div {
+    margin: 2px;
+    border-style: double;
+    padding: 10px 20px;
   }
 }
